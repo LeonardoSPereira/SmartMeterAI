@@ -25,6 +25,7 @@ model Measure {
   customerCode String
   measureType  MeasureType
   measureValue Int?        @map("measure_value")
+  isVerified   Boolean     @default(false) @map("is_verified")
   createdAt    DateTime    @default(now())
 
   @@map("measures")
