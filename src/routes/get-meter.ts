@@ -20,9 +20,14 @@ export async function getMeter(app: FastifyInstance) {
         querystring: z.object({
           measure_type: z
             .string()
-            .refine((value) => {
-              return ['water', 'gas'].includes(value.toLocaleLowerCase())
-            })
+            .refine(
+              (value) => {
+                return ['water', 'gas'].includes(value.toLocaleLowerCase())
+              },
+              {
+                message: 'Invalid measure type.',
+              },
+            )
             .optional(),
         }),
         response: {
@@ -45,10 +50,16 @@ export async function getMeter(app: FastifyInstance) {
       const { customerId } = request.params
       const { measure_type } = request.query
 
+      const measureTypeFilter = measure_type
+        ? measure_type === 'water'
+          ? 'WATER'
+          : 'GAS'
+        : undefined
+
       const measures = await prisma.measure.findMany({
         where: {
           customerCode: customerId,
-          measureType: measure_type === 'water' ? 'WATER' : 'GAS',
+          measureType: measureTypeFilter,
         },
         orderBy: {
           createdAt: 'desc',
