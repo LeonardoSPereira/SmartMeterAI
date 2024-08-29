@@ -44,6 +44,6 @@ app.register(imageUpload)
 app.register(confirmData)
 app.register(getMeter)
 
-app.listen({ port: env.PORT }).then(() => {
+app.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
   console.log('🚀 HTTP server running!')
 })
