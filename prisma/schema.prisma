@@ -23,7 +23,7 @@ model Measure {
   imageUrl     String      @map("image_url")
   customerCode String
   measureType  MeasureType
-  measureValue Int        @map("measure_value")
+  measureValue Float       @map("measure_value")
   isVerified   Boolean     @default(false) @map("is_verified")
   createdAt    DateTime    @default(now())
 

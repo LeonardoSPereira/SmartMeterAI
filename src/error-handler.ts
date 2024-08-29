@@ -8,7 +8,7 @@ import { MeasureNotFoundError } from './routes/_errors/measure-not-found-error'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
-export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
+export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   if (error instanceof ZodError) {
     reply.status(400).send({
       message: 'Validation error',
@@ -23,7 +23,7 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
   }
 
   if (error instanceof MeasureNotFoundError) {
-    reply.status(40).send({
+    reply.status(404).send({
       message: error.message,
     })
   }

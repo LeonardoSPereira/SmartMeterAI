@@ -14,7 +14,7 @@ export async function imageUpload(app: FastifyInstance) {
     '/upload',
     {
       schema: {
-        tags: ['image'],
+        tags: ['image-upload'],
         summary: 'Upload an image to be processed',
         body: z.object({
           image: z.string().transform((image) => {
