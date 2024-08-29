@@ -4,6 +4,7 @@ import fs from 'fs'
 import { Base64 } from 'js-base64'
 import { z } from 'zod'
 
+import { env } from '../env'
 import { fileManager, genAI } from '../lib/ai'
 import { prisma } from '../lib/prisma'
 import { AiValueError } from './_errors/ai-value-error'
@@ -103,7 +104,7 @@ export async function imageUpload(app: FastifyInstance) {
 
       // Get the generative model
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: env.GEMINI_AI_MODEL,
       })
 
       // Create the request prompt

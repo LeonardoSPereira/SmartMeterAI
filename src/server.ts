@@ -9,6 +9,7 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
+import { env } from './env'
 import { errorHandler } from './error-handler'
 import { confirmData } from './routes/confirm-data'
 import { getMeter } from './routes/get-meter'
@@ -43,6 +44,6 @@ app.register(imageUpload)
 app.register(confirmData)
 app.register(getMeter)
 
-app.listen({ port: 3333 }).then(() => {
+app.listen({ port: env.PORT }).then(() => {
   console.log('🚀 HTTP server running!')
 })
