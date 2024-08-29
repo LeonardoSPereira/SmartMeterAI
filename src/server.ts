@@ -9,11 +9,17 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
+import { errorHandler } from './error-handler'
 import { confirmData } from './routes/confirm-data'
 import { getMeter } from './routes/get-meter'
 import { imageUpload } from './routes/image-upload'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
+
+app.setSerializerCompiler(serializerCompiler)
+app.setValidatorCompiler(validatorCompiler)
+
+app.setErrorHandler(errorHandler)
 
 app.register(fastifyCors)
 
@@ -32,9 +38,6 @@ app.register(fastifySwagger, {
 app.register(fastifySwaggerUI, {
   routePrefix: '/docs',
 })
-
-app.setSerializerCompiler(serializerCompiler)
-app.setValidatorCompiler(validatorCompiler)
 
 app.register(imageUpload)
 app.register(confirmData)
