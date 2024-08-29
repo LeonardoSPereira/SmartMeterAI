@@ -4,8 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "dev": "tsx watch --env-file=.env src/server.ts",
-    "start": "node build/server.js",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --format esm",
+    "start": "node dist/http/server.mjs"
   },
   "keywords": [],
   "author": "",
