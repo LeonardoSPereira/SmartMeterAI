@@ -1,10 +1,19 @@
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import fs from 'fs'
 import { Base64 } from 'js-base64'
 import { z } from 'zod'
 
 import { fileManager, genAI } from '../lib/ai'
 import { prisma } from '../lib/prisma'
+
+function decodeBase64Image(base64String: string) {
+  // Remove the data URL prefix if present
+  const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '')
+
+  // Decode the base64 string to binary data
+  return Buffer.from(base64Data, 'base64')
+}
 
 export async function imageUpload(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -46,15 +55,35 @@ export async function imageUpload(app: FastifyInstance) {
         })
       }
 
-      const uploadResponse = await fileManager.uploadFile(image, {
-        mimeType: 'image/base64',
-        displayName: `${customer_code}-${measure_datetime}-${measure_type}`,
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, '')
+
+      const buffer = Buffer.from(base64Data, 'base64')
+
+      // Save the image to a file
+      fs.writeFile('./uploads/image-to-upload.png', buffer, (err) => {
+        if (err) {
+          console.error('Error saving the image:', err)
+        } else {
+          console.log('Image saved successfully as output-image.png')
+        }
       })
 
-      console.log(uploadResponse)
+      // const imageBuffer = decodeBase64Image(image)
+
+      console.log('Uploading image...')
+
+      const uploadResponse = await fileManager.uploadFile(
+        './uploads/image-to-upload.png',
+        {
+          mimeType: 'image/png',
+          displayName: `${customer_code}-${measure_datetime}-${measure_type}`,
+        },
+      )
+
+      console.log('upload:', uploadResponse)
 
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-pro',
+        model: 'gemini-1.5-flash',
       })
 
       const result = await model.generateContent([
@@ -69,7 +98,7 @@ export async function imageUpload(app: FastifyInstance) {
         },
       ])
 
-      console.log(result)
+      console.log('result:', result.response.text())
     },
   )
 }
