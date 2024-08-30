@@ -38,7 +38,7 @@ git clone https://github.com/LeonardoSPereira/SmartMeterAI.git
 ```env
 PORT=3333
 
-DATABASE_URL="postgres://docker:docker@smartmeterai-postgres-1:5432/postgres?schema=public"
+DATABASE_URL="postgres://docker:docker@smartmeterai-postgres-1:5432/postgres-1?schema=public"
 
 GEMINI_API_KEY=
 
