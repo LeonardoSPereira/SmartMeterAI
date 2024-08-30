@@ -45,7 +45,7 @@ GEMINI_API_KEY=
 GEMINI_AI_MODEL="gemini-1.5-flash" | "gemini-1.5-pro"
 ```
 
-4. Start the database:
+4. Build and run the application and the database with the following command:
 ```bash
 docker-compose up --build -d
 ```
